@@ -57,9 +57,8 @@ async def evaluate_heuristics(
         
         detection_result = await detection_client.detect_elements(contents)
 
-        # Initialize evaluation engine and evaluate
-        evaluation_engine = HeuristicEvaluationEngine()
-        await evaluation_engine.initialize()
+        # Use singleton evaluation engine from app.state (avoids re-initializing on every request)
+        evaluation_engine = request.app.state.heuristic_engine
 
         evaluation_result = await evaluation_engine.evaluate_interface(detection_result)
 
